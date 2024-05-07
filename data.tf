@@ -6,8 +6,8 @@ data "aws_sqs_queue" "this" {
   name     = each.key
 }
 
-data "aws_sqs_queue" "this_failure" {
-  for_each = local.queue_name != null && var.lambda.sqs_event_mapping.with_dead_letter_queue ? toset([local.queue_name]) : toset([])
+data "aws_sqs_queue" "this_dlq" {
+  for_each = local.queue_name != null && var.sqs_event_mapping.with_dead_letter_queue ? toset([local.queue_name]) : toset([])
   name     = "dead__${each.key}"
 }
 

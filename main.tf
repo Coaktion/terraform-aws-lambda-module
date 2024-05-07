@@ -22,10 +22,9 @@ module "lambda_function" {
 
   event_source_mapping = {
     sqs = {
-      event_source_arn = local.queue.arn
-      scaling_config   = var.lambda.sqs_event_mapping.scaling_config
-
-      function_response_types = var.lambda.sqs_event_mapping.function_response_types
+      event_source_arn        = local.queue.arn
+      scaling_config          = var.sqs_event_mapping.scaling_config
+      function_response_types = var.sqs_event_mapping.function_response_types
     }
   }
 

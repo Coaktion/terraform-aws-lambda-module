@@ -14,23 +14,6 @@ variable "lambda" {
     publish = bool
     timeout = number
 
-    s3 = optional(object({
-      bucket             = string
-      new                = optional(bool, false)
-      local_package_path = string
-    }))
-
-    sqs_event_mapping = optional(object({
-      queue_name             = string
-      with_dead_letter_queue = optional(bool, false)
-
-      function_response_types = list(string)
-
-      scaling_config = optional(object({
-        maximum_concurrency = number
-      }))
-    }))
-
     policies = optional(map(object({
       effect    = string
       resources = list(string)
@@ -38,5 +21,28 @@ variable "lambda" {
     })))
 
     environment_variables = optional(map(string))
+  })
+}
+
+variable "s3" {
+  description = "Bucket for storing the Lambda package"
+  type = object({
+    bucket             = string
+    new                = optional(bool, false)
+    local_package_path = string
+  })
+}
+
+variable "sqs_event_mapping" {
+  description = "SQS event mapping configuration"
+  type = object({
+    queue_name             = string
+    with_dead_letter_queue = optional(bool, false)
+
+    function_response_types = list(string)
+
+    scaling_config = optional(object({
+      maximum_concurrency = number
+    }))
   })
 }

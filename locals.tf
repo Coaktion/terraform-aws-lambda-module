@@ -2,13 +2,14 @@ locals {
   # -------------------------------------------
   ############# SQS Event Mapping #############
   # -------------------------------------------
-  queue_name    = var.lambda.sqs_event_mapping != null ? var.resources_prefix != null ? "${var.resources_prefix}__${var.lambda.sqs_event_mapping.queue_name}" : var.lambda.sqs_event_mapping.queue_name : null
-  queue         = var.lambda.sqs_event_mapping != null ? data.aws_sqs_queue.this[local.queue_name] : null
-  queue_failure = var.lambda.sqs_event_mapping != null && var.lambda.sqs_event_mapping.with_dead_letter_queue ? data.aws_sqs_queue.this_failure[local.queue_name] : null
+  queue_name = var.sqs_event_mapping != null ? var.resources_prefix != null ? "${var.resources_prefix}__${var.sqs_event_mapping.queue_name}" : var.sqs_event_mapping.queue_name : null
+  queue      = var.sqs_event_mapping != null ? data.aws_sqs_queue.this[local.queue_name] : null
+  dl_queue   = var.sqs_event_mapping != null && var.sqs_event_mapping.with_dead_letter_queue ? data.aws_sqs_queue.this_dlq[local.queue_name] : null
 
-  sqs_policy = var.lambda.sqs_event_mapping != null ? {
+
+  sqs_policy = var.sqs_event_mapping != null ? {
     effect    = "Allow"
-    resources = [local.queue.arn, local.queue_failure.arn]
+    resources = [local.queue.arn, local.dl_queue.arn]
 
     actions = [
       "sqs:ReceiveMessage",
@@ -23,7 +24,7 @@ locals {
   # -----------------------------------------
   function_name = var.resources_prefix != null ? "${var.resources_prefix}__${var.lambda.name}" : var.lambda.name
 
-  function_triggers = var.lambda.sqs_event_mapping != null ? {
+  function_triggers = var.sqs_event_mapping != null ? {
     sqs = {
       principal  = "sqs.amazonaws.com"
       source_arn = local.queue.arn
@@ -37,10 +38,10 @@ locals {
   # ------------------------------------------
   ############# S3 Package Bucket ############
   # ------------------------------------------
-  normalized_bucket_name = var.lambda.s3.bucket != null ? var.resources_prefix != null ? replace("${var.resources_prefix}-${var.lambda.s3.bucket}", "__", "--") : replace(var.lambda.s3.bucket, "__", "--") : null
+  normalized_bucket_name = var.s3.bucket != null ? var.resources_prefix != null ? replace("${var.resources_prefix}-${var.s3.bucket}", "__", "--") : replace(var.s3.bucket, "__", "--") : null
   bucket_name            = local.normalized_bucket_name != null ? local.normalized_bucket_name : null
 
-  create_bucket = local.bucket_name != null && var.lambda.s3.new
+  create_bucket = local.bucket_name != null && var.s3.new
   s3_bucket     = local.create_bucket ? resource.aws_s3_bucket.this[local.bucket_name] : data.aws_s3_bucket.this[local.bucket_name]
-  s3_object     = local.create_bucket ? resource.aws_s3_object.this[local.bucket_name] : null
+  s3_object     = local.bucket_name != null ? resource.aws_s3_object.this[local.bucket_name] : null
 }
