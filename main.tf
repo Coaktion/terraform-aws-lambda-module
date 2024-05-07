@@ -6,11 +6,12 @@ module "lambda_function" {
   description   = var.lambda.description
   handler       = var.lambda.handler
   runtime       = var.lambda.runtime
-  publish       = true
+  publish       = var.lambda.publish
+  timeout       = var.lambda.timeout
 
   create_package = false
 
-  store_on_s3 = true
+  store_on_s3 = local.bucket_name != null
   s3_bucket   = local.bucket_name
 
   s3_existing_package = {

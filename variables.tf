@@ -12,16 +12,18 @@ variable "lambda" {
     handler = string
     runtime = string
     publish = bool
-
-    package = optional(string) # Path to the Zip package
+    timeout = number
 
     s3 = optional(object({
       bucket             = string
+      new                = optional(bool, false)
       local_package_path = string
     }))
 
     sqs_event_mapping = optional(object({
-      queue_name              = string
+      queue_name             = string
+      with_dead_letter_queue = optional(bool, false)
+
       function_response_types = list(string)
 
       scaling_config = optional(object({
