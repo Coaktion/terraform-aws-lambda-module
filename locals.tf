@@ -9,7 +9,7 @@ locals {
 
   sqs_policy = var.sqs_event_mapping != null ? {
     effect    = "Allow"
-    resources = [local.queue.arn, local.dl_queue.arn]
+    resources = var.sqs_event_mapping.with_dead_letter_queue ? [local.queue.arn, local.dl_queue.arn] : [local.queue.arn]
 
     actions = [
       "sqs:ReceiveMessage",
