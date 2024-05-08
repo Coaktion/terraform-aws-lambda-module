@@ -3,14 +3,34 @@ variable "resources_prefix" {
   type        = string
 }
 
+variable "region" {
+  description = "AWS region"
+  type        = string
+  default     = "us-east-1"
+}
+
+variable "access_key_id" {
+  description = "AWS Access Key used to build and push Lambda Docker image"
+  type        = string
+  nullable    = true
+  default     = null
+}
+
+variable "secret_access_key" {
+  description = "AWS Secret Access Key used to build and push Lambda Docker image"
+  type        = string
+  nullable    = true
+  default     = null
+}
+
 variable "lambda" {
   description = "Lambda configuration"
   type = object({
     name        = string
     description = string
 
-    handler = string
-    runtime = string
+    handler = optional(string)
+    runtime = optional(string)
     publish = bool
     timeout = number
 
@@ -31,6 +51,18 @@ variable "s3" {
     new                = optional(bool, false)
     local_package_path = string
   })
+  nullable = true
+  default  = null
+}
+
+variable "ecr" {
+  description = "ECR repository for storing the Lambda package"
+  type = object({
+    repository      = string
+    dockerfile_path = string
+  })
+  nullable = true
+  default  = null
 }
 
 variable "sqs_event_mapping" {

@@ -54,10 +54,10 @@ locals {
   # ------------------------------------------
   ############# S3 Package Bucket ############
   # ------------------------------------------
-  normalized_bucket_name = var.s3.bucket != null ? var.resources_prefix != null ? replace("${var.resources_prefix}-${var.s3.bucket}", "__", "--") : replace(var.s3.bucket, "__", "--") : null
+  normalized_bucket_name = var.s3 != null ? var.resources_prefix != null ? replace("${var.resources_prefix}-${var.s3.bucket}", "__", "--") : replace(var.s3.bucket, "__", "--") : null
   bucket_name            = local.normalized_bucket_name != null ? local.normalized_bucket_name : null
 
-  create_bucket = local.bucket_name != null && var.s3.new
-  s3_bucket     = local.create_bucket ? resource.aws_s3_bucket.this[local.bucket_name] : data.aws_s3_bucket.this[local.bucket_name]
+  create_bucket = local.bucket_name != null ? var.s3.new : false
+  s3_bucket     = local.create_bucket ? resource.aws_s3_bucket.this[local.bucket_name] : var.s3 != null ? data.aws_s3_bucket.this[local.bucket_name] : null
   s3_object     = local.bucket_name != null ? resource.aws_s3_object.this[local.bucket_name] : null
 }

@@ -26,3 +26,19 @@ data "aws_s3_bucket" "this" {
   for_each = local.bucket_name != null && !local.create_bucket ? toset([local.bucket_name]) : toset([])
   bucket   = each.key
 }
+
+# ------------------------------
+############# ECR ##############
+# ------------------------------
+data "aws_ecr_repository" "this" {
+  for_each = var.ecr != null ? toset([var.ecr.repository]) : toset([])
+  name     = each.key
+}
+
+data "aws_ecr_image" "this" {
+  for_each        = var.ecr != null ? toset([var.ecr.repository]) : toset([])
+  repository_name = each.key
+  image_tag       = "latest"
+
+  depends_on = [null_resource.build_docker_image]
+}

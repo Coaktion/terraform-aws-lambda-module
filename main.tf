@@ -10,15 +10,17 @@ module "lambda_function" {
   timeout       = var.lambda.timeout
 
   create_package = false
+  package_type   = var.ecr != null ? "Image" : "Zip"
 
   store_on_s3 = local.bucket_name != null
   s3_bucket   = local.bucket_name
 
-  s3_existing_package = {
+  s3_existing_package = var.s3 != null ? {
     bucket = local.s3_bucket.id
     key    = local.s3_object.id
-  }
+  } : null
 
+  image_uri = var.ecr != null ? data.aws_ecr_image.this[var.ecr.repository].image_uri : null
 
   event_source_mapping = local.queue != null ? {
     sqs = {
