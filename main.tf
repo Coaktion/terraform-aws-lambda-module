@@ -23,8 +23,8 @@ module "lambda_function" {
   event_source_mapping = {
     sqs = {
       event_source_arn        = local.queue.arn
-      scaling_config          = var.sqs_event_mapping.scaling_config
-      function_response_types = var.sqs_event_mapping.function_response_types
+      scaling_config          = var.sqs_event_mapping != null ? var.sqs_event_mapping.scaling_config : null
+      function_response_types = var.sqs_event_mapping != null ? var.sqs_event_mapping.function_response_types : null
     }
   }
 

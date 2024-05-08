@@ -45,4 +45,7 @@ variable "sqs_event_mapping" {
       maximum_concurrency = number
     }))
   })
+
+  nullable = true
+  default  = null
 }
