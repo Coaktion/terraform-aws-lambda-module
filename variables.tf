@@ -45,7 +45,15 @@ variable "sqs_event_mapping" {
       maximum_concurrency = number
     }))
   })
+  nullable = true
+  default  = null
+}
 
+variable "api_gateway" {
+  description = "API Gateway to trigger the Lambda function"
+  type = object({
+    name = string
+  })
   nullable = true
   default  = null
 }

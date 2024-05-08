@@ -7,8 +7,16 @@ data "aws_sqs_queue" "this" {
 }
 
 data "aws_sqs_queue" "this_dlq" {
-  for_each = local.queue_name != null && var.sqs_event_mapping.with_dead_letter_queue ? toset([local.queue_name]) : toset([])
+  for_each = local.queue_name != null && local.with_dlq ? toset([local.queue_name]) : toset([])
   name     = "dead__${each.key}"
+}
+
+# --------------------------------------
+############# API Gateway ##############
+# --------------------------------------
+data "aws_api_gateway_rest_api" "this" {
+  for_each = local.gtw_name != null ? toset([local.gtw_name]) : toset([])
+  name     = each.key
 }
 
 # -----------------------------
