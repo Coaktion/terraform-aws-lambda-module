@@ -48,7 +48,8 @@ locals {
 
   function_triggers = merge(local.sqs_trigger, local.api_gtw_trigger)
 
-  function_policies = var.lambda.policies != null ? local.sqs_policy != null ? merge(var.lambda.policies, { sqs = local.sqs_policy }) : var.lambda.policies : {}
+  lambda_policies   = var.lambda.policies != null ? var.lambda.policies : {}
+  function_policies = local.sqs_policy != null ? merge(local.lambda_policies, { sqs = local.sqs_policy }) : local.lambda_policies
 
   # ------------------------------------------
   ############# S3 Package Bucket ############
