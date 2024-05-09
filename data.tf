@@ -6,11 +6,6 @@ data "aws_sqs_queue" "this" {
   name     = each.key
 }
 
-data "aws_sqs_queue" "this_dlq" {
-  for_each = local.queue_name != null && local.with_dlq ? toset([local.queue_name]) : toset([])
-  name     = "dead__${each.key}"
-}
-
 # --------------------------------------
 ############# API Gateway ##############
 # --------------------------------------

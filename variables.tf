@@ -68,9 +68,7 @@ variable "ecr" {
 variable "sqs_event_mapping" {
   description = "SQS event mapping configuration"
   type = object({
-    queue_name             = string
-    with_dead_letter_queue = optional(bool, false)
-
+    queue_name              = string
     function_response_types = list(string)
 
     scaling_config = optional(object({

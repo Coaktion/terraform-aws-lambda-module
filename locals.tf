@@ -5,13 +5,9 @@ locals {
   queue_name = var.sqs_event_mapping != null ? var.resources_prefix != null ? "${var.resources_prefix}__${var.sqs_event_mapping.queue_name}" : var.sqs_event_mapping.queue_name : null
   queue      = var.sqs_event_mapping != null ? data.aws_sqs_queue.this[local.queue_name] : null
 
-  # If does not have a queue, it also does not have a DLQ
-  with_dlq = var.sqs_event_mapping != null ? var.sqs_event_mapping.with_dead_letter_queue : false
-  dl_queue = var.sqs_event_mapping != null && local.with_dlq ? data.aws_sqs_queue.this_dlq[local.queue_name] : null
-
   sqs_policy = var.sqs_event_mapping != null ? {
     effect    = "Allow"
-    resources = var.sqs_event_mapping.with_dead_letter_queue ? [local.queue.arn, local.dl_queue.arn] : [local.queue.arn]
+    resources = [local.queue.arn]
 
     actions = [
       "sqs:ReceiveMessage",
