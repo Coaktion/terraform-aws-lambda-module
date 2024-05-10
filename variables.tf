@@ -27,6 +27,7 @@ variable "lambda" {
   description = "Lambda configuration"
   type = object({
     name        = string
+    version     = string
     description = string
 
     handler = optional(string)
