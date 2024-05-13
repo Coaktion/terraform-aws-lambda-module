@@ -4,10 +4,13 @@ module "lambda_function" {
 
   function_name = local.function_name
   description   = var.lambda.description
-  handler       = var.lambda.handler
-  runtime       = var.lambda.runtime
-  publish       = var.lambda.publish
-  timeout       = var.lambda.timeout
+
+  handler     = var.lambda.handler
+  runtime     = var.lambda.runtime
+  timeout     = var.lambda.timeout
+  memory_size = var.lambda.memory_size
+
+  publish = var.lambda.publish
 
   create_package = false
   package_type   = var.ecr != null ? "Image" : "Zip"

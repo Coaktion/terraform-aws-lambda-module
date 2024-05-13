@@ -30,10 +30,12 @@ variable "lambda" {
     version     = string
     description = string
 
-    handler = optional(string)
-    runtime = optional(string)
+    handler     = optional(string)
+    runtime     = optional(string)
+    timeout     = optional(number, 3)
+    memory_size = optional(number, 128)
+
     publish = bool
-    timeout = number
 
     policies = optional(map(object({
       effect    = string
