@@ -1,6 +1,8 @@
 variable "resources_prefix" {
   description = "Prefix for resources, prefer to use the project name"
   type        = string
+  nullable    = true
+  default     = null
 }
 
 variable "region" {
