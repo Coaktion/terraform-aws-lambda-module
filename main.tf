@@ -28,6 +28,7 @@ module "lambda_function" {
   event_source_mapping = local.queue != null ? {
     sqs = {
       event_source_arn        = local.queue.arn
+      batch_size              = var.sqs_event_mapping.batch_size
       scaling_config          = var.sqs_event_mapping.scaling_config
       function_response_types = var.sqs_event_mapping.function_response_types
     }

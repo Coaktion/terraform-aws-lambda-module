@@ -73,6 +73,7 @@ variable "sqs_event_mapping" {
   type = object({
     queue_name              = string
     function_response_types = list(string)
+    batch_size              = optional(number, 10)
 
     scaling_config = optional(object({
       maximum_concurrency = number
