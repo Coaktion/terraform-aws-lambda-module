@@ -1,7 +1,7 @@
 locals {
-  # -------------------------------------------
-  ############# SQS Event Mapping #############
-  # -------------------------------------------
+  #################################################
+  # ------------- SQS Event Mapping ------------- #
+  #################################################
   queue_name = var.sqs_event_mapping != null ? var.resources_prefix != null ? "${var.resources_prefix}__${var.sqs_event_mapping.queue_name}" : var.sqs_event_mapping.queue_name : null
   queue      = var.sqs_event_mapping != null ? data.aws_sqs_queue.this[local.queue_name] : null
 
@@ -17,17 +17,17 @@ locals {
     ]
   } : null
 
-  # -------------------------------------
-  ############# API Gateway #############
-  # -------------------------------------
+  ###########################################
+  # ------------- API Gateway ------------- #
+  ###########################################
   gtw_name = var.api_gateway != null ? var.resources_prefix != null ? "${var.resources_prefix}__${var.api_gateway.name}" : var.api_gateway.name : null
 
-  # -----------------------------------------
-  ############# Lambda Function #############
-  # -----------------------------------------
+  ###############################################
+  # ------------- Lambda Function ------------- #
+  ###############################################
   function_name = var.resources_prefix != null ? "${var.resources_prefix}__${var.lambda.name}" : var.lambda.name
 
-  # ---------------- Triggers ----------------
+  # ------------- Triggers -------------
   sqs_trigger = local.queue != null ? {
     sqs = {
       principal  = "sqs.amazonaws.com"
@@ -47,9 +47,9 @@ locals {
   lambda_policies   = var.lambda.policies != null ? var.lambda.policies : {}
   function_policies = local.sqs_policy != null ? merge(local.lambda_policies, { sqs = local.sqs_policy }) : local.lambda_policies
 
-  # ------------------------------------------
-  ############# S3 Package Bucket ############
-  # ------------------------------------------
+  #################################################
+  # ------------- S3 Package Bucket ------------- #
+  #################################################
   normalized_bucket_name = var.s3 != null ? var.resources_prefix != null ? replace("${var.resources_prefix}-${var.s3.bucket}", "__", "--") : replace(var.s3.bucket, "__", "--") : null
   bucket_name            = local.normalized_bucket_name != null ? local.normalized_bucket_name : null
 
@@ -57,8 +57,8 @@ locals {
   s3_bucket     = local.create_bucket ? resource.aws_s3_bucket.this[local.bucket_name] : var.s3 != null ? data.aws_s3_bucket.this[local.bucket_name] : null
   s3_object     = local.bucket_name != null ? resource.aws_s3_object.this[local.bucket_name] : null
 
-  # ------------------------------------
-  ############# ECR Package ############
-  # ------------------------------------
+  ###########################################
+  # ------------- ECR Package ------------- #
+  ###########################################
   image_tag = var.ecr != null ? var.ecr.stage != null ? "${var.ecr.stage}-latest" : "latest" : null
 }
