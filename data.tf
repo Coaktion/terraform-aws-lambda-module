@@ -33,7 +33,7 @@ data "aws_ecr_repository" "this" {
 data "aws_ecr_image" "this" {
   for_each        = var.ecr != null ? toset([var.ecr.repository]) : toset([])
   repository_name = each.key
-  image_tag       = "latest"
+  image_tag       = local.image_tag
 
   depends_on = [null_resource.build_docker_image]
 }

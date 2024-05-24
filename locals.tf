@@ -56,4 +56,9 @@ locals {
   create_bucket = local.bucket_name != null ? var.s3.new : false
   s3_bucket     = local.create_bucket ? resource.aws_s3_bucket.this[local.bucket_name] : var.s3 != null ? data.aws_s3_bucket.this[local.bucket_name] : null
   s3_object     = local.bucket_name != null ? resource.aws_s3_object.this[local.bucket_name] : null
+
+  # ------------------------------------
+  ############# ECR Package ############
+  # ------------------------------------
+  image_tag = var.ecr != null ? var.ecr.stage != null ? "${var.ecr.stage}-latest" : "latest" : null
 }

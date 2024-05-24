@@ -65,6 +65,7 @@ variable "ecr" {
   type = object({
     repository      = string
     dockerfile_path = string
+    stage           = optional(string)
   })
   nullable = true
   default  = null

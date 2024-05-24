@@ -24,7 +24,7 @@ resource "null_resource" "build_docker_image" {
   }
 
   provisioner "local-exec" {
-    command = "docker tag ${local.function_name}:latest ${data.aws_ecr_repository.this[each.key].repository_url}:latest"
+    command = "docker tag ${local.function_name}:latest ${data.aws_ecr_repository.this[each.key].repository_url}:${local.image_tag}"
     environment = {
       AWS_ACCESS_KEY_ID     = var.access_key_id
       AWS_SECRET_ACCESS_KEY = var.secret_access_key
@@ -33,7 +33,7 @@ resource "null_resource" "build_docker_image" {
   }
 
   provisioner "local-exec" {
-    command = "docker push ${data.aws_ecr_repository.this[each.key].repository_url}:latest"
+    command = "docker push ${data.aws_ecr_repository.this[each.key].repository_url}:${local.image_tag}"
     environment = {
       AWS_ACCESS_KEY_ID     = var.access_key_id
       AWS_SECRET_ACCESS_KEY = var.secret_access_key
