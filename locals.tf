@@ -17,17 +17,6 @@ locals {
     ]
   } : null
 
-  ###########################################
-  # ------------- API Gateway ------------- #
-  ###########################################
-  gtw_name = var.api_gateway != null ? var.resources_prefix != null ? "${var.resources_prefix}__${var.api_gateway.name}" : var.api_gateway.name : null
-
-  ###############################################
-  # ------------- Lambda Function ------------- #
-  ###############################################
-  function_name = var.resources_prefix != null ? "${var.resources_prefix}__${var.lambda.name}" : var.lambda.name
-
-  # ------------- Triggers -------------
   sqs_trigger = local.queue != null ? {
     sqs = {
       principal  = "sqs.amazonaws.com"
@@ -35,13 +24,22 @@ locals {
     }
   } : {}
 
+  ###########################################
+  # ------------- API Gateway ------------- #
+  ###########################################
+  gtw_name = var.api_gateway != null ? var.api_gateway.name != null ? var.resources_prefix != null ? "${var.resources_prefix}__${var.api_gateway.name}" : var.api_gateway.name : null : null
+
   api_gtw_trigger = var.api_gateway != null ? {
     api_gateway = {
       principal  = "apigateway.amazonaws.com"
-      source_arn = "${data.aws_api_gateway_rest_api.this[local.gtw_name].execution_arn}/*/*/*"
+      source_arn = var.api_gateway.execution_arn != null ? "${var.api_gateway.execution_arn}/*/*/*" : "${data.aws_api_gateway_rest_api.this[local.gtw_name].execution_arn}/*/*/*"
     }
   } : {}
 
+  ###############################################
+  # ------------- Lambda Function ------------- #
+  ###############################################
+  function_name     = var.resources_prefix != null ? "${var.resources_prefix}__${var.lambda.name}" : var.lambda.name
   function_triggers = merge(local.sqs_trigger, local.api_gtw_trigger)
 
   lambda_policies   = var.lambda.policies != null ? var.lambda.policies : {}

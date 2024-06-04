@@ -88,9 +88,20 @@ variable "sqs_event_mapping" {
 
 variable "api_gateway" {
   description = "API Gateway to trigger the Lambda function"
-  type = object({
-    name = string
+  type = object({ # Should pass the name or the ARN
+    name          = optional(string)
+    execution_arn = optional(string)
   })
+
+  validation {
+    condition = (
+      var.api_gateway.name != null && var.api_gateway.execution_arn == null
+      ) || (
+      var.api_gateway.name == null && var.api_gateway.execution_arn != null
+    )
+    error_message = "Either name or execution_arn should be provided"
+  }
+
   nullable = true
   default  = null
 }
