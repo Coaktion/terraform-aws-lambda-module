@@ -90,17 +90,8 @@ variable "api_gateway" {
   description = "API Gateway to trigger the Lambda function"
   type = object({ # Should pass the name or the ARN
     name          = optional(string)
-    execution_arn = optional(string)
+    execution_arn = optional(string) # ARN will be preferred
   })
-
-  validation {
-    condition = (
-      var.api_gateway.name != null && var.api_gateway.execution_arn == null
-      ) || (
-      var.api_gateway.name == null && var.api_gateway.execution_arn != null
-    )
-    error_message = "Either name or execution_arn should be provided"
-  }
 
   nullable = true
   default  = null
