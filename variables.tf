@@ -45,7 +45,7 @@ variable "lambda" {
       actions   = list(string)
     })))
 
-    environment_variables = optional(map(string))
+    environment_variables = optional(map(string), {})
   })
 }
 
