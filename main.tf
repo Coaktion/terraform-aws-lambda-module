@@ -36,7 +36,7 @@ module "lambda_function" {
 
   allowed_triggers = local.function_triggers
 
-  attach_policy_statements = true
+  attach_policy_statements = length(keys(local.function_policies)) > 0
   policy_statements        = local.function_policies
 
   environment_variables = var.lambda.environment_variables
