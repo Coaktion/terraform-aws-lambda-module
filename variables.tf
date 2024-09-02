@@ -34,7 +34,7 @@ variable "lambda" {
 
     handler     = optional(string)
     runtime     = optional(string)
-    timeout     = optional(number, 3)
+    timeout     = optional(number, 30)
     memory_size = optional(number, 128)
 
     publish = bool
@@ -75,7 +75,7 @@ variable "sqs_event_mapping" {
   description = "SQS event mapping configuration"
   type = object({
     queue_name              = string
-    function_response_types = list(string)
+    function_response_types = optional(list(string), ["ReportBatchItemFailures"])
     batch_size              = optional(number, 10)
 
     scaling_config = optional(object({
