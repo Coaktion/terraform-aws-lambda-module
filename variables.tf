@@ -39,6 +39,11 @@ variable "lambda" {
 
     publish = bool
 
+    vpc = optional(object({
+      subnet_ids         = list(string)
+      security_group_ids = list(string)
+    }))
+
     policies = optional(map(object({
       effect    = string
       resources = list(string)

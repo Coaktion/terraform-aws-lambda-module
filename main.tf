@@ -10,6 +10,9 @@ module "lambda_function" {
   timeout     = var.lambda.timeout
   memory_size = var.lambda.memory_size
 
+  vpc_subnet_ids         = var.lambda.vpc != null ? var.lambda.vpc.subnet_ids : []
+  vpc_security_group_ids = var.lambda.vpc != null ? var.lambda.vpc.security_group_ids : []
+
   publish = var.lambda.publish
 
   create_package = false
