@@ -27,7 +27,7 @@ module "lambda" {
     description = "Lambda example"
 
     handler     = "lambda.handler" # Obrigatório para lambdas .zip. Não utilizar para lambdas dockerizadas
-    runtime     = "nodejs18.x"     # Obrigatório para lambdas .zip. Não utilizar para lambdas dockerizadas
+    runtime     = "nodejs20.x"     # Obrigatório para lambdas .zip. Não utilizar para lambdas dockerizadas
     timeout     = 60               # Opcional, padrão => 30 segundos
     memory_size = 64               # Opcional, padrão => 128Mb
 
