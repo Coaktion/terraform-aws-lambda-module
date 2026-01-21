@@ -90,4 +90,10 @@ module "lambda" {
   api_gateway = { # Opcional, somente utilizado em conjunto com o módulo Terraform AWS API Gateway
     execution_arn = module.apigateway.rest_api.execution_arn
   }
+
+  tags = { # Opcional
+    Environment = "development"
+    Project     = "example"
+    ManagedBy   = "terraform"
+  }
 }

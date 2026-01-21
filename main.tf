@@ -43,4 +43,6 @@ module "lambda_function" {
   policy_statements        = local.function_policies
 
   environment_variables = var.lambda.environment_variables
+
+  tags = var.tags
 }
