@@ -101,3 +101,9 @@ variable "api_gateway" {
   nullable = true
   default  = null
 }
+
+variable "tags" {
+  description = "Tags to apply to the Lambda function and related resources"
+  type        = map(string)
+  default     = {}
+}
