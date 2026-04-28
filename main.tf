@@ -23,7 +23,7 @@ module "lambda_function" {
 
   s3_existing_package = var.s3 != null ? {
     bucket = local.s3_bucket.id
-    key    = local.s3_object.id
+    key    = local.s3_object.key
   } : null
 
   image_uri = var.ecr != null ? data.aws_ecr_image.this[var.ecr.repository].image_uri : null
